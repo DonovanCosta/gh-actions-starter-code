@@ -1,15 +1,35 @@
 ---
-name: continuous Deployment
+# name: continuous Deployment
 
+# on: push
+
+# jobs:
+#   hello-gh-actions:
+#     name: Hello Github hello-gh-actions
+#     runs-on: ubuntu-20.04
+#     steps:
+#       - name: checkout
+#         uses: actions/checkout@v2
+#       - name: Run Tests
+#         run: echo "Running Tests"
+
+# Runs the tests and does linting of the project
 on: push
 
 jobs:
-  hello-gh-actions:
-    name: Hello Github hello-gh-actions
+  test:
+    name: Test
     runs-on: ubuntu-20.04
     steps:
-      - name: checkout
+      - name: Checkout
         uses: actions/checkout@v2
-      - name: Run Tests
-        run: echo "Running Tests"
-        
+      - name: Test
+        run: docker-compose run --rm app sh -c "python manage.py test"
+  lint:
+    name: lint
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: lint
+        run: docker-compose run --rm app ssh -c "flake8"
